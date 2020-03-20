@@ -3,9 +3,13 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const server = express();
 
+const welcomeRouter = require("./routes/welcome-router");
+
 server.use(helmet());
 server.use(morgan('tiny'));
 server.use(express.json());
+server.use("/api/welcome", welcomeRouter);
+
 
 
 server.use((req,res,next) => res.status(404).json({msg:'No Route Found'}));
