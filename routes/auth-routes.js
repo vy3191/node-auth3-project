@@ -1,5 +1,6 @@
 const express = require('express');
 const brcypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const router = express.Router();
 const userModal = require('../modals/user-modal');
 const verifyUserInput = require('../middleware/verifyUserInput');
@@ -25,17 +26,27 @@ router.post('/register',verifyUserInput, async (req,res,next) => {
 });
 
 
-router.post('/login', (req,res,next) => {
+router.post('/login', async (req,res,next) => {
   try{
     const { username, password, department } = req.body;
     if(!username) res.status(400).json({msg:'User name is missing'});
     if(!password) res.status(400).json({msg: 'Password is missing'});
-    if(!department) res.status(400).json({msg:'Department is missing'});
+    // if(!department) res.status(400).json({msg:'Department is missing'});
     if(!req.body) res.status(400).json({msg: 'Please enter all the fields'});
 
     const user = await userModal.findBy({username}).first();
-    const password = await brcypt.compare(password, user.password);
-    if(!user || !password) res.status(401).json({msg:'Invalid credentials'});
+    const userPassword = await brcypt.compare(password, user.password);
+    if(!user || !userPassword) res.status(401).json({msg:'Invalid credentials'});
+    console.log('user', user);
+    console.log('password', userPassword);
+    // **********Implementing JSON WEB TOKEN **********
+    const payload = {
+      userId:user.id,
+      userRole:'normal'
+    }
+    const token = jwt.sign(payload, 'this is my secret');
+    res.setHeader('Set-Cookie', `token=${token}; path=/; httpOnly=true`);
+    res.status(200).json({msg:`Welcome back, ${username}`});
 
   }catch(err){
      next(err);
