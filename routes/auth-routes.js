@@ -44,7 +44,7 @@ router.post('/login', async (req,res,next) => {
       userId:user.id,
       userRole:'normal'
     }
-    const token = jwt.sign(payload, 'this is my secret');
+    const token = jwt.sign(payload,process.env.JWT_KEY);
     res.setHeader('Set-Cookie', `token=${token}; path=/; httpOnly=true`);
     res.status(200).json({msg:`Welcome back, ${username}`});
 

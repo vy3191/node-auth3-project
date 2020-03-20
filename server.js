@@ -1,6 +1,7 @@
 const express = require('express');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
 const server = express();
 
 const welcomeRouter = require("./routes/welcome-router");
@@ -10,6 +11,7 @@ const usersRouter = require("./routes/user-routes");
 server.use(helmet());
 server.use(morgan('tiny'));
 server.use(express.json());
+server.use(cookieParser());
 server.use("/api/welcome", welcomeRouter);
 server.use("/api/auth", authRouter);
 server.use("/api/users", usersRouter)
