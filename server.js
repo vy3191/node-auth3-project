@@ -4,12 +4,14 @@ const morgan = require('morgan');
 const server = express();
 
 const welcomeRouter = require("./routes/welcome-router");
+const authRouter = require("./routes/auth-routes");
 const usersRouter = require("./routes/user-routes");
 
 server.use(helmet());
 server.use(morgan('tiny'));
 server.use(express.json());
 server.use("/api/welcome", welcomeRouter);
+server.use("/api/auth", authRouter);
 server.use("/api/users", usersRouter)
 
 

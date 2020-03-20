@@ -5,8 +5,8 @@ function verifyUserInput(req,res,next) {
    if(!password) res.status(400).json({msg: 'Password is missing'});
    if(!department) res.status(400).json({msg:'Department is missing'});
    if(!req.body) res.status(400).json({msg: 'Please enter all the fields'});
-   req.username = username;
+   req.newUser = {username,password,department};
    next();
 }
 
-module.exports = router;
+module.exports = verifyUserInput;
