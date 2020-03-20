@@ -1,7 +1,6 @@
 // Update with your config settings.
 
 module.exports = {
-
   development: {
     client: 'sqlite3',
     connection: {
@@ -18,5 +17,5 @@ module.exports = {
         conn.run("PRAGMA foreign_keys = ON", done)
       },  
   },
- 
-};
+ }
+}
