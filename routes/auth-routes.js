@@ -8,7 +8,6 @@ const verifyUserInput = require('../middleware/verifyUserInput');
 router.post('/register',verifyUserInput, async (req,res,next) => {
       try{
         const { username, password, department } = req.body;
-
         if(!username) res.status(400).json({msg:'User name is missing'});
         if(!password) res.status(400).json({msg: 'Password is missing'});
         if(!department) res.status(400).json({msg:'Department is missing'});
@@ -28,6 +27,15 @@ router.post('/register',verifyUserInput, async (req,res,next) => {
 
 router.post('/login', (req,res,next) => {
   try{
+    const { username, password, department } = req.body;
+    if(!username) res.status(400).json({msg:'User name is missing'});
+    if(!password) res.status(400).json({msg: 'Password is missing'});
+    if(!department) res.status(400).json({msg:'Department is missing'});
+    if(!req.body) res.status(400).json({msg: 'Please enter all the fields'});
+
+    const user = await userModal.findBy({username}).first();
+    const password = await brcypt.compare(password, user.password);
+    if(!user || !password) res.status(401).json({msg:'Invalid credentials'});
 
   }catch(err){
      next(err);
